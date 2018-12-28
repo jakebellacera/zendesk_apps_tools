@@ -64,9 +64,10 @@ module ZendeskAppsTools
 
     def find_app_id
       say_status 'Update', 'app ID is missing, searching...'
-      app_name = get_value_from_stdin('Enter the name of the app:')
 
-      all_apps_json = cached_connection.get('/api/apps.json').body
+      app_name = cache.fetch('app_name') || get_value_from_stdin('Enter the name of the app:')
+
+      all_apps_json = cached_connection.get('/api/v2/apps.json').body
 
       app =
         unless all_apps_json.empty?
@@ -80,7 +81,7 @@ module ZendeskAppsTools
         )
       end
 
-      cache.save 'app_id' => app['id']
+      cache.save 'app_id' => app['id'], 'app_name' => app['name']
       app['id']
 
     rescue Faraday::Error::ClientError => e
@@ -130,6 +131,7 @@ module ZendeskAppsTools
       zat['subdomain'] = @subdomain
       zat['username'] = @username
       zat['app_id'] = response['app_id'] if response['app_id']
+      zat['app_id'] = response['app_name'] if response['app_name']
 
       zat
     end
