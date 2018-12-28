@@ -150,9 +150,10 @@ describe ZendeskAppsTools::Command do
       end
 
       it 'cannot find the app id' do
-        stub_request(:get, PREFIX + '/api/apps.json')
+        stub_request(:get, PREFIX + '/api/v2/apps.json')
           .with(headers: AUTHORIZATION_HEADER)
           .to_return(body: '')
+
         expect(@command).to receive(:say_error).with(
           "App not found. " \
           "Please verify that your credentials, subdomain, and app name are correct."
@@ -161,7 +162,7 @@ describe ZendeskAppsTools::Command do
       end
 
       it 'finds the app id' do
-        stub_request(:get, PREFIX + '/api/apps.json')
+        stub_request(:get, PREFIX + '/api/v2/apps.json')
           .with(headers: AUTHORIZATION_HEADER)
           .to_return(body: JSON.generate(apps))
         stub_request(:get, PREFIX + '/api/v2/apps/125.json')

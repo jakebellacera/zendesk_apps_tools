@@ -18,6 +18,7 @@ describe ZendeskAppsTools::Deploy do
     define_method(:mocked_instance_methods_and_api) do |app_name|
       subject = subject_class.new
       allow(subject).to receive(:say_status)
+      allow(subject).to receive_message_chain(:cache, :fetch)
       allow(subject).to receive(:get_value_from_stdin) { app_name }
       allow(subject).to receive_message_chain(:cached_connection, :get, :body) { api_response_with_app_ids }
 

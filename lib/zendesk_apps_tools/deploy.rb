@@ -64,7 +64,6 @@ module ZendeskAppsTools
 
     def find_app_id
       say_status 'Update', 'app ID is missing, searching...'
-
       app_name = cache.fetch('app_name') || get_value_from_stdin('Enter the name of the app:')
 
       all_apps_json = cached_connection.get('/api/v2/apps.json').body
